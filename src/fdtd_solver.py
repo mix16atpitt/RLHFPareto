@@ -1,6 +1,7 @@
 import sys, os
 sys.path.append("C:\\Program Files\\Lumerical\\v241\\api\\python\\")
 sys.path.append("C:\\Program Files\\Lumerical\\v232\\api\\python\\")
+sys.path.append("D:\\Program Files\\Lumerical\\v241\\api\\python\\")
 import lumapi
 
 class FDTDSolver:

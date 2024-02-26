@@ -38,7 +38,7 @@ class SESimulation:
         SE = self.calculate_SE(RT)
 
         # Output results
-        print(f'stackrt: SE {SE:.4f}')
+        # print(f'stackrt: SE {SE:.4f}')
         return SE
 
 # Example usage
