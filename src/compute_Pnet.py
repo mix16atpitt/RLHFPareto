@@ -5,7 +5,7 @@ import sys, os
 from data_processing import DataProcessor
 from fdtd_solver import FDTDSolver
 from solar_index import SolarIndex
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 import numpy as np
 import pandas as pd
 
@@ -55,7 +55,7 @@ class PnetSimulation:
         A_300nm_4um_freq = 1 - R_300nm_4um_freq
         A_300nm_4um_freq = A_300nm_4um_freq[:, 0]
         absorbed_power_density_300nm_4um = AM1_5_interpolated * A_300nm_4um_freq
-        P_300nm_4um = -trapz(absorbed_power_density_300nm_4um, lambda_vector_300nm_4um * MToNm)
+        P_300nm_4um = -trapezoid(absorbed_power_density_300nm_4um, lambda_vector_300nm_4um * MToNm)
         return P_300nm_4um
 
     def calculate_cooling(self, n_cool):
@@ -95,11 +95,11 @@ class PnetSimulation:
         angular_factors_2d = angular_factors[np.newaxis, :]  # Shape becomes (1, 90)
         # Calculate the integrand for atmospheric power
         integrand_atm = I_BB_amb_2d * emissivity_atm_interp * A_cool_all_angles * angular_factors_2d
-        P_atm = -trapz(trapz(integrand_atm, lambda_vector_cool, axis=0), theta_values)
+        P_atm = -trapezoid(trapezoid(integrand_atm, lambda_vector_cool, axis=0), theta_values)
 
         # Calculate radiative power (P_rad)
         power_density_struct = I_BB_struct * A_cool_all_angles.T * np.cos(theta_values[:, np.newaxis]) * np.sin(theta_values[:, np.newaxis]) * 2 * np.pi
-        P_rad = -trapz(trapz(power_density_struct, lambda_vector_cool, axis=1), theta_values)
+        P_rad = -trapezoid(trapezoid(power_density_struct, lambda_vector_cool, axis=1), theta_values)
 
         # Calculate net cooling power (P_cool) and net power (P_net)
         P_cool = P_rad - P_atm
